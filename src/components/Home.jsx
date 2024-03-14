@@ -7,17 +7,15 @@ const Home = () => {
   return (
     <div
       name="home"
-      className="h-screen w-full bg-gradient-to-b from-black via-black to-gray-800"
+      className="min-h-screen w-full bg-gradient-to-b from-black via-black to-gray-800"
     >
-      <div className="max-w-screen-lg mx-auto flex flex-col items-center justify-center h-full px-4 md:flex-row">
-        <div className="flex flex-col justify-center h-full">
+      <div className="max-w-screen-lg mx-auto flex flex-col-reverse items-center justify-center h-full px-4 md:flex-row md:items-stretch">
+        <div className="flex flex-col justify-center md:w-1/2 md:pr-8 mt-14">
           <h2 className="text-4xl sm:text-7xl font-bold text-white">
             I'm an Android Developer
           </h2>
           <p className="text-gray-500 py-4 max-w-md">
-            I have 2 years of experience in Android Development.
-            Currently, I love to work on mobile application using technologies like
-            java, kotlin, retrofit and much much more.
+            I have 2 years of experience in Android Development. Currently, I love to work on mobile applications using technologies like Java, Kotlin, Retrofit, and much more.
           </p>
 
           <div>
@@ -35,11 +33,11 @@ const Home = () => {
           </div>
         </div>
 
-        <div>
+        <div className="md:w-1/2 ">
           <img
             src={HeroImage}
             alt="my profile"
-            className="p-16 mx-auto w-2/3 md:w-full rounded-full"
+            className="mt-10 md:mt-0 mx-auto w-2/3 md:w-full rounded-lg"
           />
         </div>
       </div>
