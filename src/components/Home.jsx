@@ -33,11 +33,11 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="md:w-1/2 ">
+        <div className="md:w-1/2 mt-20">
           <img
             src={HeroImage}
             alt="my profile"
-            className="mt-10 md:mt-0 mx-auto w-2/3 md:w-full rounded-lg"
+            className="md:mt-0 mx-auto w-2/3 md:w-full rounded-2xl mt-20"
           />
         </div>
       </div>
