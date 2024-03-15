@@ -1,9 +1,28 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
 import { Link } from "react-scroll";
-import HeroImage from "../assets/Hero.jpg";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { Firebase } from "../firebase/config";
 
 export const Profile = () => {
+  const [Desc, setDesc] = useState("");
+  const [Title, setTitle] = useState("");
+  const [ProfileImage, setProfileImage] = useState("");
+  useEffect(() => {
+    Firebase.firestore()
+      .collection("Portfolio")
+      .doc("ProfileData")
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          console.log("Document data:", doc.data().Description);
+          setDesc(doc.data().Description);
+          setTitle(doc.data().Title);
+          setProfileImage(doc.data().ProfileImage);
+        } else {
+          console.log("No such document!");
+        }
+      });
+  }, []);
   return (
     <div
       name="home"
@@ -12,10 +31,10 @@ export const Profile = () => {
       <div className="max-w-screen-lg mx-auto flex flex-col-reverse items-center justify-center h-full px-4 md:flex-row md:items-stretch">
         <div className="flex flex-col justify-center md:w-1/2 md:pr-8 mt-14">
           <h2 className="text-4xl sm:text-7xl font-bold text-white">
-            I'm an Android Developer
+            {Title}
           </h2>
           <p className="text-gray-500 py-4 max-w-md">
-            I have 2 years of experience in Android Development. Currently, I love to work on mobile applications using technologies like Java, Kotlin, Retrofit, and much more.
+            {Desc}
           </p>
 
           <div>
@@ -35,12 +54,12 @@ export const Profile = () => {
 
         <div className="md:w-1/2 mt-20">
           <img
-            src={HeroImage}
+            src={ProfileImage}
             alt="my profile"
             className="md:mt-0 mx-auto w-2/3 md:w-full rounded-2xl mt-20"
           />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

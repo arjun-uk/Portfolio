@@ -1,9 +1,27 @@
-import React, { useState }from 'react';
+import React, { useState ,useEffect}from 'react';
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-scroll";
+import { Firebase } from "../firebase/config";
 
 const NavBar = () => {
+
     const [nav, setNav] = useState(false);
+    const [Name, setName] = useState("");
+
+
+    useEffect(() => {
+
+        Firebase.firestore().collection("Portfolio").doc("ProfileData").get().then((doc) => {
+            if (doc.exists) {
+                console.log("Document data:", doc.data().name);
+                setName(doc.data().name);
+            } else {
+                console.log("No such document!");
+            }
+        });
+      
+    }, [])
+    
     const links = [
         {
           id: 1,
@@ -30,7 +48,7 @@ const NavBar = () => {
     return (
         <div className="flex justify-between items-center w-full h-20 px-4 text-white bg-black fixed">
             <div>
-                <h1 className="text-5xl font-logo ml-2">Arjun Uk</h1>
+                <h1 className="text-5xl font-logo ml-2">{Name}</h1>
             </div>
 
             <ul className="hidden md:flex">

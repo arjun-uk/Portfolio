@@ -1,6 +1,23 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
+import { Firebase } from "../firebase/config";
 
 const About = () => {
+  const [About, setAbout] = useState("");
+  useEffect(() => {
+    Firebase.firestore()
+      .collection("Portfolio")
+      .doc("ProfileData")
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          console.log("Document data:", doc.data().aboutMe);
+          setAbout(doc.data().aboutMe);
+          
+        } else {
+          console.log("No such document!");
+        }
+      });
+  }, []);
   return (
     <div
       name="about"
@@ -13,9 +30,7 @@ const About = () => {
           </p>
         </div>
 
-        <p className="text-xl mt-10">
-          As a seasoned Android Developer, I've honed my craft in the dynamic realm of mobile application development and enhancement. With 1.5 years of hands-on experience, I've recently concluded my tenure at Uniflyn Softtech Pvt Ltd in Coimbatore. My journey thus far has instilled in me a deep passion for technological innovation and a relentless pursuit of excellence. Now, I eagerly anticipate the next chapter of my career, where I aspire to channel my expertise into transformative projects that push the boundaries of possibility.
-        </p>
+        <p className="text-xl mt-10">{About}</p>
       </div>
     </div>
   );
