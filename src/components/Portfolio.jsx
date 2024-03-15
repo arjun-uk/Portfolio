@@ -1,8 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import navbar from "../assets/myApp.png";
+import axios from "../axios/axios";
 
 
 const Portfolio = () => {
+
+  const [posts, setposts] = useState([]);
+
+
+  useEffect(() => {
+  
+    axios.get("/posts").then((response) => {
+      console.log(response.data);
+      setposts(response.data);
+    });
+
+  }, [])
+  
+  
+  
+
   const portfolios = [
     {
       id: 1,
@@ -20,7 +37,7 @@ const Portfolio = () => {
       <div className="max-w-screen-lg p-4 mx-auto flex flex-col justify-center h-full">
         <div className="pb-8">
           <p className="text-4xl font-bold inline border-b-4 border-gray-500">
-            Projects
+            projects
           </p>
           <p className="py-6">Check out some of my work right here</p>
         </div>
@@ -43,6 +60,27 @@ const Portfolio = () => {
               </div>
             </div>
           ))}
+
+          {/* {posts.map((obj)=>{
+            return(
+              <div key={obj.id} className="shadow-md shadow-gray-600 rounded-3xl  bg-slate-900">
+              <img
+                src="{src}"
+                alt=""
+                className="rounded-3xl p-2 duration-200"
+              />
+              <h4 className="text-2xl pl-4 mb-2 mt-2 font-bold">{obj.title}</h4>
+              <div className="flex items-center justify-center">
+                <div className="mb-5 hover:scale-105">
+                  <a href="{link}" className="group text-white w-fit px-10 py-3 my-2 flex items-center rounded-md bg-gradient-to-r from-green-500 to-green-500 cursor-pointer">
+                    Play Store
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            ); 
+          })} */}
         </div>
       </div>
     </div>

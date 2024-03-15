@@ -1,9 +1,9 @@
 import React from 'react'
+import { Link } from "react-scroll";
 import HeroImage from "../assets/Hero.jpg";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { Link } from "react-scroll";
 
-const Home = () => {
+export const Profile = () => {
   return (
     <div
       name="home"
@@ -42,8 +42,5 @@ const Home = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-
-export default Home
+  )
+}
