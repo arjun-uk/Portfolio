@@ -1,72 +1,27 @@
-import React from "react";
-import android from "../assets/android.png";
-import java from "../assets/java.png";
-import retrofit from "../assets/retrofit.png";
-import reactImage from "../assets/react.png";
-import kotlin from "../assets/kotlin.png";
-import realm from "../assets/realm.png";
-import github from "../assets/github.png";
-import python from "../assets/python.png";
-import firebase from "../assets/firebase.png";
+import React, { useState, useEffect } from "react";
+import { Firebase } from "../firebase/config";
 
 const Experience = () => {
-  const techs = [
-    {
-      id: 1,
-      src: android,
-      title: "Android",
-      style: "shadow-orange-500",
-    },
-    {
-      id: 2,
-      src: java,
-      title: "Java",
-      style: "shadow-blue-500",
-    },
-    {
-      id: 3,
-      src: retrofit,
-      title: "Retrofit",
-      style: "shadow-yellow-500",
-    },
-    {
-      id: 4,
-      src: reactImage,
-      title: "React",
-      style: "shadow-blue-600",
-    },
-    {
-      id: 6,
-      src: kotlin,
-      title: "Kotlin",
-      style: "shadow-white",
-    },
-
-    {
-      id: 7,
-      src: github,
-      title: "GitHub",
-      style: "shadow-gray-400",
-    },
-    {
-      id: 8,
-      src: python,
-      title: "Python",
-      style: "shadow-gray-400",
-    },
-    {
-      id: 9,
-      src: realm,
-      title: "Realm",
-      style: "shadow-gray-400",
-    },
-    {
-      id: 10,
-      src: firebase,
-      title: "Firebase",
-      style: "shadow-gray-400",
-    },
-  ];
+  const [expertise, setExpertise] = useState([]);
+  useEffect(() => {
+    Firebase.firestore()
+      .collection("PortfolioExpertise")
+      .get()
+      .then((querySnapshot) => {
+        const expertiseArray = [];
+        querySnapshot.forEach((doc) => {
+          if (doc.exists) {
+            expertiseArray.push({ id: doc.id, ...doc.data() });
+          } else {
+            console.log("No such document:", doc.id);
+          }
+        });
+        setExpertise(expertiseArray);
+      })
+      .catch((error) => {
+        console.error("Error getting documents: ", error);
+      });
+  }, []);
 
   return (
     <div
@@ -76,19 +31,27 @@ const Experience = () => {
       <div className="max-w-screen-lg mx-auto p-4 flex flex-col justify-center w-full h-full">
         <div>
           <p className="text-4xl font-bold border-b-4 border-gray-500 p-2 inline">
-            Experience
+            Expertise
           </p>
           <p className="py-6">These are the technologies I've worked with</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 text-center py-8 px-4 sm:px-0">
-          {techs.map(({ id, src, title, style }) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center items-center py-8 px-4 lg:px-10">
+          {expertise.map((item) => (
             <div
-              key={id}
-              className={`shadow-md hover:scale-105 duration-500 py-2 rounded-lg ${style}`}
+              key={item.id}
+              className="bg-white rounded-3xl shadow-md hover:shadow-lg transition duration-300"
             >
-              <img src={src} alt="" className="h-20 w-30 mx-auto" />
-              <p className="mt-4">{title}</p>
+              <div className="flex justify-center items-center h-40 overflow-hidden rounded-3xl">
+                <img
+                  src={item.image}
+                  alt=""
+                  className="max-h-42 w-full object-cover object-center p-4 rounded-3xl"
+                />
+              </div>
+              <p className="text-center text-black text-lg font-semibold py-4">
+                {item.expertise}
+              </p>
             </div>
           ))}
         </div>

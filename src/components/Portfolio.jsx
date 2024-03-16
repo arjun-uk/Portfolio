@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Firebase } from "../firebase/config";
 
 const Portfolio = () => {
-  const portfolios = [
-    {
-      id: 1,
-      src: "https://play-lh.googleusercontent.com/gk4OF5Rv4xFjZ0qmpw9RyZWjZz9B_JefKwxab_nZvhSz3Ch_oFvc6rgU7mIggdhGOdEG=w240-h480-rw",
-      link: "https://play.google.com/store/apps/details?id=com.ott.rhyfill&pcampaignid=web_share",
-      title: "VDOJAR",
-    },
-  ];
+  const [projects, setProjects] = useState([]);
+  useEffect(() => {
+    Firebase.firestore()
+      .collection("PortfolioProjects")
+      .get()
+      .then((querySnapshot) => {
+        const projectsArray = [];
+        querySnapshot.forEach((doc) => {
+          if (doc.exists) {
+            projectsArray.push({ id: doc.id, ...doc.data() });
+            console.log("Document data:", doc.data());
+          } else {
+            console.log("No such document:", doc.id);
+          }
+        });
+        setProjects(projectsArray);
+      })
+      .catch((error) => {
+        console.error("Error getting documents: ", error);
+      });
+  }, []);
 
   return (
     <div
@@ -23,51 +37,30 @@ const Portfolio = () => {
           <p className="py-6">Check out some of my work right here</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-4 sm:px-0 ">
-          {portfolios.map(({ id, src, link, title }) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-4 sm:px-0">
+          {projects.map((project) => (
             <div
-              key={id}
-              className="shadow-md shadow-gray-600 rounded-3xl  bg-slate-900"
+              key={project.id}
+              className="bg-white rounded-3xl shadow-md overflow-hidden"
             >
               <img
-                src={src}
-                alt=""
-                className="rounded-3xl p-2 duration-200 mx-auto"
+                src={project.image}
+                alt="Project"
+                className="w-full h-60 sm:h-48 object-cover object-center p-4 rounded-3xl"
               />
-              <h4 className="text-2xl pl-4 mb-2 mt-2 font-bold">{title}</h4>
-              <div className="flex items-center justify-center">
-                <div className="mb-5 hover:scale-105">
-                  <a
-                    href={link}
-                    className="group text-white w-fit px-10 py-3 my-2 flex items-center rounded-md bg-gradient-to-r from-green-500 to-green-500 cursor-pointer"
-                  >
-                    Play Store
-                  </a>
-                </div>
+              <div className="p-4 rounded-sm">
+                <h4 className="text-xl font-semibold mb-2">
+                  {project.project_name}
+                </h4>
+                <a
+                  href={project.link}
+                  className="block w-full py-2 px-4 rounded-md text-center text-white0 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 transition duration-300"
+                >
+                  View on Play Store
+                </a>
               </div>
             </div>
           ))}
-
-          {/* {posts.map((obj)=>{
-            return(
-              <div key={obj.id} className="shadow-md shadow-gray-600 rounded-3xl  bg-slate-900">
-              <img
-                src="{src}"
-                alt=""
-                className="rounded-3xl p-2 duration-200"
-              />
-              <h4 className="text-2xl pl-4 mb-2 mt-2 font-bold">{obj.title}</h4>
-              <div className="flex items-center justify-center">
-                <div className="mb-5 hover:scale-105">
-                  <a href="{link}" className="group text-white w-fit px-10 py-3 my-2 flex items-center rounded-md bg-gradient-to-r from-green-500 to-green-500 cursor-pointer">
-                    Play Store
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            ); 
-          })} */}
         </div>
       </div>
     </div>
